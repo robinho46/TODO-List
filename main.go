@@ -21,7 +21,8 @@ func main() {
 		fmt.Println("│ 1. Add a task              │")
 		fmt.Println("│ 2. Completed a task        │")
 		fmt.Println("│ 3. List tasks              │")
-		fmt.Println("│ 4. Quit                    │")
+		fmt.Println("│ 4. Delete task             │")
+		fmt.Println("│ 5. Quit                    │")
 		fmt.Println("└────────────────────────────┘")
 		fmt.Print("What command do you want to execute: ")
 
@@ -41,24 +42,36 @@ func main() {
 			if err == nil {
 				fmt.Println("Added successfully!")
 			} else {
-				fmt.Println("Add failed?")
+				fmt.Println("❌ Add failed?")
 			}
 		case 2:
-			fmt.Println("Enter the id of the task you want to mark as completed and press enter:")
+			fmt.Print("Enter the id of the task you want to mark as completed and press enter: ")
 			var taskId int
 			fmt.Scan(&taskId)
 			err := cmd.UpdateTask(db, taskId)
 			if err != nil {
-				fmt.Println("Error when trying to mark as completed:", err)
+				fmt.Println("❌ Error when trying to mark as completed:", err)
+			} else {
+				fmt.Printf("\nMarked task id %d as completed ✅\n\n", taskId)
 			}
 		case 3:
 			err := cmd.ListTasks(db)
 			if err != nil {
-				fmt.Println("Error listing tasks:", err)
+				fmt.Println("❌ Error listing tasks:", err)
 			} else {
 				continue
 			}
 		case 4:
+			fmt.Print("Enter the id of the task you want to delete and press enter: ")
+			var taskId int
+			fmt.Scan(&taskId)
+			err := cmd.DeleteTask(db, taskId)
+			if err != nil {
+				fmt.Println("❌ Error when trying to delete task:", err)
+			} else {
+				fmt.Printf("\nDeleted task id %d ✅ \n\n", taskId)
+			}
+		case 5:
 			fmt.Println("👋 Exiting...")
 			return
 
