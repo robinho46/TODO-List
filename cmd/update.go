@@ -6,7 +6,7 @@ import (
 )
 
 func UpdateTask(db *sql.DB, taskId int) error {
-	query := "UPDATE tasks SET completed_at = NOW(), done = TRUE WHERE id = $1"
+	query := "UPDATE tasks SET completed_at = NOW(), done = TRUE WHERE id = $1 AND done = FALSE"
 
 	res, err := db.Exec(query, taskId)
 	if err != nil {
