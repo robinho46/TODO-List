@@ -4,41 +4,59 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
-// Global DB variable
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "todo-db" // Replace with your actual PostgreSQL password
+	dbname   = "todo_list"
+)
+
 var db *sql.DB
 
-// connectDB initializes the connection to the Neon.tech database
 func connectDB() {
-	// Load environment variables from .env file
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("❌ Error loading .env file")
-	}
+	psqlInfo := fmt.Sprintf(
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname,
+	)
 
-	// Retrieve the database URL from environment variables
-	databaseURL := os.Getenv("DATABASE_URL")
-	if databaseURL == "" {
-		log.Fatal("❌ DATABASE_URL is not set in environment variables")
-	}
-
-	// Open the database connection
-	db, err = sql.Open("postgres", databaseURL)
+	var err error
+	db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Fatal("❌ Error connecting to the database:", err)
 	}
 
-	// Test the database connection
 	err = db.Ping()
 	if err != nil {
 		log.Fatal("❌ Database is not responding:", err)
 	}
 
-	fmt.Println("✅ Successfully connected to the Neon.tech database!")
+	fmt.Println("✅ Successfully connected to the database!")
+
+	// Create the tasks table if it doesn't exist
+	createTable()
+}
+
+func createTable() {
+	query := `
+	DROP TABLE IF EXISTS tasks;
+	CREATE TABLE tasks (
+	    id SERIAL PRIMARY KEY,
+	    task TEXT NOT NULL,
+	    done BOOLEAN DEFAULT FALSE,
+	    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	    completed_at TIMESTAMP NULL
+	);`
+
+	_, err := db.Exec(query)
+	if err != nil {
+		log.Fatal("❌ Error creating table:", err)
+	}
+
+	fmt.Println("✅ Table 'tasks' is ready!")
 }
 
