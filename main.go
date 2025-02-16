@@ -13,19 +13,19 @@ func main() {
 	defer db.Close()
 
 	//fmt.Println("📝 TODO List CLI is running!")
-
+	fmt.Println("Welcome to your TODO list | 📝")
 	for {
-		fmt.Println("Welcome to your TODO list | 📝")
-		fmt.Println("------------------------------")
-		fmt.Println("| 1. Add a task              |")
-		fmt.Println("| 2. Completed a task        |")
-		fmt.Println("| 3. List tasks              |")
-		fmt.Println("| 4. Quit                    |")
-		fmt.Println("------------------------------")
-		fmt.Println("What do you want to do: ")
+		fmt.Println("┌────────────────────────────┐")
+		fmt.Println("│         TODO List          │")
+		fmt.Println("│         ─────────          │")
+		fmt.Println("│ 1. Add a task              │")
+		fmt.Println("│ 2. Completed a task        │")
+		fmt.Println("│ 3. List tasks              │")
+		fmt.Println("│ 4. Quit                    │")
+		fmt.Println("└────────────────────────────┘")
+		fmt.Print("What command do you want to execute: ")
 
 		var choice int
-		fmt.Print("Enter your choice: ")
 		_, err := fmt.Scan(&choice)
 		if err != nil {
 			fmt.Println("Invalid input. Please enter a number.")
@@ -44,7 +44,13 @@ func main() {
 				fmt.Println("Add failed?")
 			}
 		case 2:
-			break
+			fmt.Println("Enter the id of the task you want to mark as completed and press enter:")
+			var taskId int
+			fmt.Scan(&taskId)
+			err := cmd.UpdateTask(db, taskId)
+			if err != nil {
+				fmt.Println("Error when trying to mark as completed:", err)
+			}
 		case 3:
 			err := cmd.ListTasks(db)
 			if err != nil {
