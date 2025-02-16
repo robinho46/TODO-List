@@ -4,36 +4,41 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "todo-db" // Replace with your actual PostgreSQL password
-	dbname   = "todo_list"
-)
-
+// Global DB variable
 var db *sql.DB
 
+// connectDB initializes the connection to the Neon.tech database
 func connectDB() {
-	psqlInfo := fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname,
-	)
+	// Load environment variables from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("❌ Error loading .env file")
+	}
 
-	var err error
-	db, err = sql.Open("postgres", psqlInfo)
+	// Retrieve the database URL from environment variables
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		log.Fatal("❌ DATABASE_URL is not set in environment variables")
+	}
+
+	// Open the database connection
+	db, err = sql.Open("postgres", databaseURL)
 	if err != nil {
 		log.Fatal("❌ Error connecting to the database:", err)
 	}
 
+	// Test the database connection
 	err = db.Ping()
 	if err != nil {
 		log.Fatal("❌ Database is not responding:", err)
 	}
 
-	fmt.Println("✅ Successfully connected to the database!")
+	fmt.Println("✅ Successfully connected to the Neon.tech database!")
 }
+
