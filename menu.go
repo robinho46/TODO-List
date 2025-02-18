@@ -53,9 +53,14 @@ func menu() {
 		case 1:
 			// Add a task
 			reader := bufio.NewReader(os.Stdin)
-			fmt.Print("Enter the task description: ")
+			//fmt.Print("Enter the task description: ")
+			fmt.Print("Enter the task description (0 to return): ")
 			task, _ := reader.ReadString('\n')
 			task = strings.TrimSpace(task)
+			if task == "0" {
+				fmt.Println("Returning to the main menu...")
+				continue
+			}
 			err := cmd.AddTask(db, task)
 			if err == nil {
 				fmt.Println("Added successfully!")
@@ -68,9 +73,14 @@ func menu() {
 			subChoice := completedMenu()
 			switch subChoice {
 			case 1:
-				fmt.Print("Enter the id of the task you want to mark as completed: ")
+				//fmt.Print("Enter the id of the task you want to mark as completed: ")
+				fmt.Print("Enter the id of the task you want to mark as completed (0 to return): ")
 				var taskId int
 				fmt.Scan(&taskId)
+				if taskId == 0 {
+					fmt.Println("Returning to the main menu...")
+					continue
+				}
 				err := cmd.UpdateTask(db, taskId)
 				if err != nil {
 					fmt.Println("❌ Error when trying to mark as completed:", err)
@@ -78,9 +88,14 @@ func menu() {
 					fmt.Printf("Marked task id %d as completed ✅\n", taskId)
 				}
 			case 2:
-				fmt.Print("Enter the id of the task you want to delete: ")
+				//fmt.Print("Enter the id of the task you want to delete: ")
+				fmt.Print("Enter the id of the task you want to delete (0 to return): ")
 				var taskId int
 				fmt.Scan(&taskId)
+				if taskId == 0 {
+					fmt.Println("Returning to the main menu...")
+					continue
+				}
 				err := cmd.DeleteTask(db, taskId)
 				if err != nil {
 					fmt.Println("❌ Error when trying to delete task:", err)
@@ -104,9 +119,14 @@ func menu() {
 
 		case 4:
 			// Delete task directly from main menu
-			fmt.Print("Enter the id of the task you want to delete: ")
+			//fmt.Print("Enter the id of the task you want to delete: ")
+			fmt.Print("Enter the id of the task you want to delete (0 to return): ")
 			var taskId int
 			fmt.Scan(&taskId)
+			if taskId == 0 {
+				fmt.Println("Returning to the main menu...")
+				continue
+			}
 			err := cmd.DeleteTask(db, taskId)
 			if err != nil {
 				fmt.Println("❌ Error when trying to delete task:", err)
