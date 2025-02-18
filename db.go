@@ -43,9 +43,9 @@ func connectDB() {
 
 func createTable() {
 	query := `
-	DROP TABLE IF EXISTS tasks;
-	CREATE TABLE tasks (
-	    id SERIAL PRIMARY KEY,
+	
+	CREATE TABLE IF NOT EXISTS tasks (
+		id SERIAL PRIMARY KEY,
 	    task TEXT NOT NULL,
 	    done BOOLEAN DEFAULT FALSE,
 	    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -59,4 +59,3 @@ func createTable() {
 
 	fmt.Println("✅ Table 'tasks' is ready!")
 }
-
