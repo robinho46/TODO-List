@@ -11,10 +11,11 @@ import (
 func completedMenu() int {
 	fmt.Println("┌────────────────────────────┐")
 	fmt.Println("│       Completed Menu       │")
-	fmt.Println("│      ──────────────        │")
+	fmt.Println("│       ─────────────        │")
 	fmt.Println("│ 1. Mark task completed     │")
 	fmt.Println("│ 2. Delete task             │")
-	fmt.Println("│ 3. Quit                    │")
+	fmt.Println("│ 3. Undo marked task        │")
+	fmt.Println("│ 4. Quit                    │")
 	fmt.Println("└────────────────────────────┘")
 	fmt.Print("What command do you want to execute: ")
 
@@ -103,6 +104,20 @@ func menu() {
 					fmt.Printf("Deleted task id %d ✅\n", taskId)
 				}
 			case 3:
+				fmt.Print("Enter the id of the task you want to undo (0 to return): ")
+				var taskId int
+				fmt.Scan(&taskId)
+				if taskId == 0 {
+					fmt.Println("Returning to the main menu...")
+					continue
+				}
+				err := cmd.UndoTask(db, taskId)
+				if err != nil {
+					fmt.Println("❌ Error when trying to undo task:", err)
+				} else {
+					fmt.Printf("Unmarked task id %d ✅\n", taskId)
+				}
+			case 4:
 				// Quit the completed menu and return to main menu
 				fmt.Println("Returning to the main menu...")
 				continue
