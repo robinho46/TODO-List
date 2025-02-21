@@ -77,6 +77,11 @@ func menu() {
 				fmt.Print("Enter the id of the task you want to mark as completed (0 to return): ")
 				var taskId int
 				_, err = fmt.Scan(&taskId)
+
+				if err != nil {
+					fmt.Println("❌ Error reading input:", err)
+					continue
+				}
 				if taskId == 0 {
 					fmt.Println("Returning to the main menu...")
 					continue
@@ -90,7 +95,11 @@ func menu() {
 			case 2:
 				fmt.Print("Enter the id of the task you want to delete (0 to return): ")
 				var taskId int
-				_, err = fmt.Scan(&taskId) // Use '=' here to update `err`
+				_, err = fmt.Scan(&taskId)
+				if err != nil {
+					fmt.Println("❌ Error reading input:", err)
+					continue
+				}
 				if taskId == 0 {
 					fmt.Println("Returning to the main menu...")
 					continue
@@ -105,6 +114,10 @@ func menu() {
 				fmt.Print("Enter the id of the task you want to undo (0 to return): ")
 				var taskId int
 				_, err = fmt.Scan(&taskId)
+				if err != nil {
+					fmt.Println("❌ Error reading input:", err)
+					continue
+				}
 				if taskId == 0 {
 					fmt.Println("Returning to the main menu...")
 					continue
@@ -133,6 +146,10 @@ func menu() {
 			fmt.Print("Enter the id of the task you want to delete (0 to return): ")
 			var taskId int
 			_, err = fmt.Scan(&taskId)
+			if err != nil {
+				fmt.Println("❌ Error reading input:", err)
+				continue
+			}
 			if taskId == 0 {
 				fmt.Println("Returning to the main menu...")
 				continue
