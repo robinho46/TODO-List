@@ -38,7 +38,8 @@ func menu() {
 		fmt.Println("│ 2. Completed a task        │")
 		fmt.Println("│ 3. List tasks              │")
 		fmt.Println("│ 4. Delete task             │")
-		fmt.Println("│ 5. Quit                    │")
+		fmt.Println("│ 5. Undo marked task        │")
+		fmt.Println("│ 6. Quit                    │")
 		fmt.Println("└────────────────────────────┘")
 		fmt.Print("What command do you want to execute: ")
 
@@ -160,8 +161,26 @@ func menu() {
 			} else {
 				fmt.Printf("Deleted task id %d ✅\n", taskId)
 			}
-
 		case 5:
+			fmt.Print("Enter the id of the task you want to undo (0 to return): ")
+			var taskId int
+			_, err = fmt.Scan(&taskId)
+			if err != nil {
+				fmt.Println("❌ Error reading input:", err)
+				continue
+			}
+			if taskId == 0 {
+				fmt.Println("Returning to the main menu...")
+				continue
+			}
+			err = cmd.UndoTask(db, taskId)
+			if err != nil {
+				fmt.Println("❌ Error when trying to undo task:", err)
+			} else {
+				fmt.Printf("Unmarked task id %d ✅\n", taskId)
+			}
+
+		case 6:
 			fmt.Println("👋 Exiting...")
 			return
 
